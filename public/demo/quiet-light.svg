@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#d9d1c3"/>
+  <circle cx="648" cy="515" r="330" fill="#bd634c"/>
+  <circle cx="420" cy="735" r="290" fill="#213f46"/>
+  <path d="M0 914 488 426l142 142 229-229 341 341v520H0z" fill="#e8b766" opacity=".88"/>
+  <path d="M83 91h1034v1018H83z" fill="none" stroke="#272621" stroke-width="24"/>
+  <text x="108" y="178" font-family="Georgia,serif" font-size="62" fill="#272621">QUIET LIGHT</text>
+  <text x="109" y="1043" font-family="Arial,sans-serif" font-size="30" letter-spacing="8" fill="#272621">MARA VALE</text>
+</svg>

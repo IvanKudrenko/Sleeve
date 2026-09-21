@@ -1,0 +1,10 @@
+{
+  "name": "Sleeve — Your music, on display.",
+  "short_name": "Sleeve",
+  "description": "An open-source always-on display for music playing elsewhere.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#171612",
+  "theme_color": "#171612",
+  "icons": [{ "src": "./sleeve-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

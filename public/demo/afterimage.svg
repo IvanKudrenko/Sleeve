@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#e7dfd2"/>
+  <path d="M213 0h105v1200H213zm224 0h44v1200h-44zm348 0h176v1200H785z" fill="#25241f"/>
+  <path d="M0 281h1200v71H0zm0 478h1200v164H0z" fill="#b74b38"/>
+  <circle cx="604" cy="583" r="190" fill="#d6a64c" stroke="#25241f" stroke-width="21"/>
+  <text x="69" y="1111" font-family="Georgia,serif" font-size="72" fill="#25241f">AFTERIMAGE</text>
+</svg>

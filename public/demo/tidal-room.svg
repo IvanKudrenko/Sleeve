@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#151d25"/>
+  <path d="M0 760Q250 590 490 760T930 735T1200 710V1200H0z" fill="#294957"/>
+  <path d="M0 845Q240 680 500 835T980 800T1200 790V1200H0z" fill="#c46d55" opacity=".8"/>
+  <circle cx="600" cy="460" r="242" fill="#e4c590"/>
+  <circle cx="600" cy="460" r="185" fill="#151d25"/>
+  <path d="M557 160v600M643 160v600" stroke="#e4c590" stroke-width="18" opacity=".4"/>
+  <text x="72" y="1078" font-family="Georgia,serif" font-size="74" fill="#f0e7d6">TIDAL ROOM</text>
+  <text x="77" y="1135" font-family="Arial,sans-serif" font-size="25" letter-spacing="9" fill="#f0e7d6">NORTH WINDOW</text>
+</svg>

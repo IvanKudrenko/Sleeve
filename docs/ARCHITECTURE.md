@@ -1,0 +1,44 @@
+# Sleeve architecture
+
+## Layers
+
+1. `src/adapters` contains independent source adapters. Every adapter emits the same `NowPlayingState`; missing timing and controls remain `undefined`/empty.
+2. `src/domain/nowPlaying.ts` owns the normalized state and stable album/track keys.
+3. `SourceRegistry` keeps one snapshot per source. A non-preferred adapter can update without replacing the visible source.
+4. `src/store/persistence.ts` stores settings, the last valid state, a 12-item recent history, and per-album artwork overrides.
+5. Display themes are independent React components. They receive only normalized state and cannot access service credentials.
+6. Remote controls are capability-gated. Current adapters advertise no controls, so Sleeve renders none and never sends speculative commands.
+
+## Data flow
+
+```text
+music service / OS session / LAN backend
+                 │
+          source adapter(s)
+                 │
+       snapshots keyed by source
+                 │ preferred source
+        normalized now-playing state
+          ┌──────┼────────┐
+    persistence  artwork   display theme
+                 override
+```
+
+The browser is always a display endpoint. No adapter moves or replays audio.
+
+## Network and trust boundary
+
+Last.fm requests go directly from the display to Last.fm with the user's own API key. Local adapters connect to the address the user enters. Media Display, Orpheus, and Tuna have their own security models; Sleeve does not add authentication to those upstream services. Keep unauthenticated upstream endpoints on a trusted LAN, do not port-forward them, and use a reverse proxy with TLS/authentication if exposing them beyond it.
+
+There is no Sleeve control API and no account token is exposed by Sleeve on the network. Authenticated QR pairing is not implemented yet; a future companion/backend should exchange a short-lived pairing code for a scoped display credential and use an authenticated WebSocket. QR codes must not contain reusable account credentials.
+
+## Persistence
+
+All persistence is local to the browser:
+
+- `sleeve.last-state.v1`: last valid normalized state, restored before a source reconnects.
+- `sleeve.history.v1`: most recent 12 unique tracks.
+- `sleeve.artwork-overrides.v1`: artwork choice keyed by normalized artist and album.
+- `sleeve.settings.v1`: display and connector preferences, including any user-supplied Last.fm key.
+
+Large uploaded files are rejected before local-storage write. A future version should move uploads to IndexedDB for larger, lossless files.
