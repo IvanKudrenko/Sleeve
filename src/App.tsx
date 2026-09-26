@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DemoAdapter } from './adapters/demo'
 import { LastFmAdapter } from './adapters/lastfm'
+import { MacCompanionAdapter } from './adapters/macCompanion'
 import { MediaDisplayAdapter } from './adapters/mediaDisplay'
 import { OrpheusAdapter } from './adapters/orpheus'
 import { SourceRegistry, type RegistrySnapshot } from './adapters/registry'
@@ -25,6 +26,7 @@ function createRegistry(settings: SleeveSettings, demo: DemoAdapter): SourceRegi
   const adapters: MusicSourceAdapter[] = [
     demo,
     new LastFmAdapter(config.lastfm),
+    new MacCompanionAdapter(config.macCompanion),
     new OrpheusAdapter(config.orpheus.baseUrl),
     new MediaDisplayAdapter(config.mediaDisplay.baseUrl),
     new TunaAdapter(config.tuna.baseUrl, config.tuna.sourceLabel),

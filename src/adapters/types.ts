@@ -18,6 +18,7 @@ export interface MusicSourceAdapter {
 export interface SourceConfig {
   preferredSource: string
   lastfm: { username: string; apiKey: string; pollSeconds: number }
+  macCompanion: { baseUrl: string; token: string }
   orpheus: { baseUrl: string }
   mediaDisplay: { baseUrl: string }
   tuna: { baseUrl: string; sourceLabel: string }

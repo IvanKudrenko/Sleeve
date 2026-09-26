@@ -30,6 +30,7 @@ export const defaultSettings: SleeveSettings = {
   source: {
     preferredSource: 'demo',
     lastfm: { username: '', apiKey: '', pollSeconds: 15 },
+    macCompanion: { baseUrl: 'https://macbook.local:4743', token: '' },
     orpheus: { baseUrl: 'http://localhost:4242' },
     mediaDisplay: { baseUrl: 'http://localhost:8090' },
     tuna: { baseUrl: 'http://localhost:1608', sourceLabel: 'Windows media' },
@@ -42,7 +43,7 @@ function parse<T>(key: string, fallback: T): T {
 
 export function loadSettings(): SleeveSettings {
   const saved = parse<Partial<SleeveSettings>>(settingsKey, {})
-  return { ...defaultSettings, ...saved, source: { ...defaultSettings.source, ...saved.source, lastfm: { ...defaultSettings.source.lastfm, ...saved.source?.lastfm }, orpheus: { ...defaultSettings.source.orpheus, ...saved.source?.orpheus }, mediaDisplay: { ...defaultSettings.source.mediaDisplay, ...saved.source?.mediaDisplay }, tuna: { ...defaultSettings.source.tuna, ...saved.source?.tuna } } }
+  return { ...defaultSettings, ...saved, source: { ...defaultSettings.source, ...saved.source, lastfm: { ...defaultSettings.source.lastfm, ...saved.source?.lastfm }, macCompanion: { ...defaultSettings.source.macCompanion, ...saved.source?.macCompanion }, orpheus: { ...defaultSettings.source.orpheus, ...saved.source?.orpheus }, mediaDisplay: { ...defaultSettings.source.mediaDisplay, ...saved.source?.mediaDisplay }, tuna: { ...defaultSettings.source.tuna, ...saved.source?.tuna } } }
 }
 
 export function saveSettings(value: SleeveSettings): void { localStorage.setItem(settingsKey, JSON.stringify(value)) }

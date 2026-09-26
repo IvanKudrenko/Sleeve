@@ -9,6 +9,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "companion:setup": "node companion/setup.mjs",
+    "companion": "node --env-file=companion/.env companion/server.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

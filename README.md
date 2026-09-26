@@ -32,6 +32,30 @@ npm run preview -- --host
 
 Static files are emitted to `dist/` and can be served by any HTTPS-capable static host. HTTPS is recommended for fullscreen/PWA behavior. If a local connector uses plain HTTP, browsers may block it from an HTTPS-hosted Sleeve page as mixed content; run Sleeve on the trusted LAN over HTTP or put both behind a secure reverse proxy.
 
+## Mac → iPad live Now Playing
+
+Sleeve includes a small read-only Mac companion for the deployed GitHub Pages app. It uses the BSD-licensed [`media-control`](https://github.com/ungive/media-control) utility—the same macOS source used by Orpheus—to receive real system Now Playing metadata from Chrome/YouTube Music and other compatible players. Audio remains on the Mac.
+
+On the Mac, with Homebrew and Node.js installed:
+
+```bash
+brew install media-control mkcert
+cd /path/to/Sleeve
+npm run companion:setup
+npm run companion
+```
+
+Setup prints a secure `.local` address and pairing token, and creates `companion/certs/Sleeve-Local-CA.cer`. Transfer **only** that public CA certificate to the iPad (AirDrop is convenient), install the downloaded profile, then enable it under Settings → General → About → Certificate Trust Settings. Never transfer a file named `rootCA-key.pem`.
+
+Keep the Mac and iPad on the same trusted Wi-Fi. If macOS asks, allow incoming connections for Node. On the iPad:
+
+1. Open <https://ivankudrenko.github.io/Sleeve/> in Safari and allow local-network access if prompted.
+2. Open Sleeve settings → Music source → Mac Now Playing.
+3. Enter the address and pairing token printed by setup, then tap **Connect to Mac**.
+4. Start YouTube Music in Chrome. Sleeve updates on track/playback changes and keeps the last valid cover if playback or the connection stops.
+
+The companion must run while live updates are wanted, but no Vite server is needed. The LAN endpoint uses HTTPS, accepts only the configured Sleeve web origin, requires a random token, exposes no playback controls, and should never be port-forwarded. The token and locally generated TLS files are gitignored. If the Mac hostname or Wi-Fi address changes and `.local` resolution does not work, rerun `npm run companion:setup` and reinstall the newly generated public CA certificate.
+
 ## Sources that work now
 
 ### Demo
@@ -41,6 +65,10 @@ No authentication. It uses three original covers and drives every visual mode. D
 ### Last.fm
 
 Choose Last.fm in settings, enter your username and personal API key, and connect. Sleeve calls the documented `user.getRecentTracks` API. It shows the live scrobble when Last.fm marks one as now playing and otherwise retains the last scrobble. Last.fm does not provide reliable progress or playback controls here, so Sleeve does not show or invent them.
+
+### Mac Now Playing
+
+Run Sleeve's secure companion as described above, then select Mac Now Playing. It reads the metadata and artwork macOS receives from Chrome/YouTube Music, Apple Music, Spotify, and other players that publish a compatible system media session. Availability and metadata completeness depend on the player; Sleeve never guesses missing album or artwork data.
 
 ### Orpheus
 
@@ -70,7 +98,7 @@ The source artwork and chosen display artwork remain separate. Sleeve never auto
 
 - Sleeve cannot inspect every music app on an iPhone, iPad, Android device, Mac, or PC from a web page.
 - Direct Spotify OAuth is not included because current development-mode/Premium/allowlist/quota and policy constraints make a universal open-source connector misleading. Use a compliant local session backend or Last.fm scrobbling.
-- Authenticated QR pairing and a Sleeve companion app are not implemented yet. Do not expose an unauthenticated Orpheus, Media Display, or Tuna endpoint to the public internet.
+- QR pairing is not implemented; Mac companion pairing uses a manually copied random token. Do not expose the companion or an unauthenticated Orpheus, Media Display, or Tuna endpoint to the public internet.
 - The browser cannot override device auto-lock or operating-system power-saving settings.
 - Animated commercial album artwork is not fetched or simulated.
 - Physical iPad/Android hardware testing has not been performed. The production build includes a Safari/iOS 13 legacy bundle and responsive/touch fallbacks, but real-device verification is still needed.
