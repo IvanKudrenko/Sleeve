@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
-import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { networkInterfaces, hostname } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -12,6 +12,7 @@ const certificatePath = join(certificateDirectory, 'sleeve.pem')
 const keyPath = join(certificateDirectory, 'sleeve-key.pem')
 const ipadCaPath = join(certificateDirectory, 'Sleeve-Local-CA.cer')
 const envPath = join(directory, '.env')
+const pairingMarker = join(directory, '.paired')
 const localName = hostname().endsWith('.local') ? hostname() : `${hostname()}.local`
 const addresses = Object.values(networkInterfaces()).flat().filter((address) => address?.family === 'IPv4' && !address.internal).map((address) => address.address)
 const names = [...new Set([localName, 'localhost', '127.0.0.1', '::1', ...addresses])]
@@ -34,11 +35,14 @@ writeFileSync(envPath, [
   `SLEEVE_TLS_KEY=${keyPath}`,
   'SLEEVE_ORIGINS=https://ivankudrenko.github.io,http://localhost:5173,http://127.0.0.1:5173',
   `SLEEVE_DEVICE_NAME=${localName}`,
+  'SLEEVE_PUBLIC_URL=https://ivankudrenko.github.io/Sleeve/',
+  'SLEEVE_PAIRING_PORT=4742',
   '',
 ].join('\n'), { mode: 0o600 })
+rmSync(pairingMarker, { force: true })
 
 console.log('\nSleeve companion setup is ready.')
 console.log(`Address: https://${localName}:4743`)
-console.log(`Pairing token: ${pairingToken}`)
 console.log(`iPad CA certificate: ${ipadCaPath}`)
+console.log('Run npm run companion. A private QR pairing page will open on this Mac.')
 console.log('Keep companion/.env and the certificate key private. Never share rootCA-key.pem.')

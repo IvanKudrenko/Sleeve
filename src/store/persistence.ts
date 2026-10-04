@@ -28,9 +28,9 @@ export const defaultSettings: SleeveSettings = {
   idleBehavior: 'keep',
   reducedMotion: false,
   source: {
-    preferredSource: 'demo',
+    preferredSource: 'mac-companion',
     lastfm: { username: '', apiKey: '', pollSeconds: 15 },
-    macCompanion: { baseUrl: 'https://macbook.local:4743', token: '' },
+    macCompanion: { baseUrl: 'https://macbook.local:4743', token: '', certificateUrl: '', deviceName: 'Mac' },
     orpheus: { baseUrl: 'http://localhost:4242' },
     mediaDisplay: { baseUrl: 'http://localhost:8090' },
     tuna: { baseUrl: 'http://localhost:1608', sourceLabel: 'Windows media' },
@@ -51,7 +51,7 @@ export function loadLastState(): NowPlayingState | undefined { return parse<NowP
 export function saveLastState(value: NowPlayingState): void { localStorage.setItem(stateKey, JSON.stringify(value)) }
 export function loadHistory(): NowPlayingState[] { return parse<NowPlayingState[]>(historyKey, []) }
 export function saveToHistory(value: NowPlayingState): NowPlayingState[] {
-  const prior = loadHistory().filter((item) => item.id !== value.id)
+  const prior = loadHistory().filter((item) => item.id !== value.id && (value.source.id === 'demo' || item.source.id !== 'demo'))
   const next = [value, ...prior].slice(0, 12)
   localStorage.setItem(historyKey, JSON.stringify(next))
   return next

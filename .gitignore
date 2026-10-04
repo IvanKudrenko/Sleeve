@@ -7,3 +7,4 @@ vite.config.d.ts
 *.local
 companion/certs/
 companion/.env
+companion/.paired

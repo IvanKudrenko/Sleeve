@@ -14,6 +14,8 @@ Audit performed 2026-09-20 against the commits below. Source, top-level license 
 | [Mixtape](https://github.com/AdvaySanketi/Mixtape) | `4765241d7f7586960627d0e2e230cca2a22cff43` | README claims MIT but the audited tree has no license file. Bundled sounds, images, and a font have no separate notices. | React/Vite, Firebase, YouTube iframe, DnD packages. It is a music player/creator rather than a passive display. | Reference only; no code or assets copied until licensing is clarified. |
 | [Codrops RecordPlayer](https://github.com/codrops/RecordPlayer) | `a1800e688afe8b82d042a861c83679224f0deaf7` | Codrops custom template terms; assets include CC BY, CC BY-SA and bespoke audio terms. | 2016 Web Audio demo with bundled music, impulse responses, icons, fonts, and older JS libraries. Plays audio itself. | Reference only. Mixed assets and player architecture are unsuitable for Sleeve. |
 
+Additional dependency audited 2026-10-04: [`qrcode` 1.5.4](https://github.com/soldair/node-qrcode) is MIT-licensed (copyright Ryan Day) and is used only by the local Mac companion to generate the pairing SVG. No package artwork or UI assets are used.
+
 ## Music service/API findings
 
 ### Last.fm

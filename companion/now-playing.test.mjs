@@ -8,6 +8,14 @@ describe('macOS now-playing normalization', () => {
     })
   })
 
+  it('accepts browser media sessions that omit artist and album metadata', () => {
+    const received = []
+    const accumulator = new NowPlayingAccumulator((track) => received.push(track))
+    accumulator.ingest({ title: 'Browser video', artworkData: 'YWJj', playing: false })
+    expect(received).toHaveLength(1)
+    expect(received[0]).toMatchObject({ title: 'Browser video', playing: false, coverUrl: 'data:image/jpeg;base64,YWJj' })
+  })
+
   it('waits for delayed artwork and then publishes one complete track', () => {
     const received = []
     const accumulator = new NowPlayingAccumulator((track) => received.push(track))

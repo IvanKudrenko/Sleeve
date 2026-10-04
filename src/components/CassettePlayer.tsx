@@ -15,6 +15,7 @@ export function CassettePlayer({ state }: { state: NowPlayingState }) {
               <span className="label-number">SIDE A</span>
               <strong>{state.track.album}</strong>
               <em>{state.track.artist}</em>
+              <span className="cassette-title">{state.track.title}</span>
             </div>
             <div className="tape-window">
               <div className={`reel left ${playing ? 'spinning' : ''}`}><span/><i/><i/><i/><i/><i/><i/></div>

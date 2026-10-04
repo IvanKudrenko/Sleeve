@@ -28,9 +28,9 @@ The browser is always a display endpoint. No adapter moves or replays audio.
 
 ## Network and trust boundary
 
-Last.fm requests go directly from the display to Last.fm with the user's own API key. Local adapters connect to the address the user enters. The Mac companion is a read-only HTTPS/SSE service with an origin allowlist and random pairing token; its token is stored only in the display browser and its TLS material stays gitignored on the Mac. Media Display, Orpheus, and Tuna have their own security models; Sleeve does not add authentication to those upstream services. Keep all local endpoints on a trusted LAN and never port-forward them.
+Last.fm requests go directly from the display to Last.fm with the user's own API key. The Mac companion is a read-only HTTPS/SSE service with an origin allowlist and random pairing token; its token is stored only in the display browser and its TLS material stays gitignored on the Mac. QR pairing encodes the local endpoint and scoped display token in a URL fragment, so GitHub Pages never receives it. The token-bearing QR page is loopback-only. A separate HTTP route serves only the public local CA certificate to the LAN. Media Display, Orpheus, and Tuna have their own security models; Sleeve does not add authentication to those upstream services. Keep all local endpoints on a trusted LAN and never port-forward them.
 
-There is no Sleeve control API and no music-account token is exposed by Sleeve on the network. Authenticated QR pairing is not implemented; the Mac companion uses a manually copied random display token. A future QR flow should exchange a short-lived pairing code for a scoped display credential. QR codes must not contain reusable account credentials.
+There is no Sleeve control API and no music-account token is exposed by Sleeve on the network. The QR contains only a random local display credential, not a music-service or macOS account credential. Advanced manual entry remains available when camera pairing is unavailable.
 
 ## Persistence
 

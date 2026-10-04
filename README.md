@@ -36,7 +36,7 @@ Static files are emitted to `dist/` and can be served by any HTTPS-capable stati
 
 Sleeve includes a small read-only Mac companion for the deployed GitHub Pages app. It uses the BSD-licensed [`media-control`](https://github.com/ungive/media-control) utility—the same macOS source used by Orpheus—to receive real system Now Playing metadata from Chrome/YouTube Music and other compatible players. Audio remains on the Mac.
 
-On the Mac, with Homebrew and Node.js installed:
+One-time Mac setup, with Homebrew and Node.js installed:
 
 ```bash
 brew install media-control mkcert
@@ -45,16 +45,11 @@ npm run companion:setup
 npm run companion
 ```
 
-Setup prints a secure `.local` address and pairing token, and creates `companion/certs/Sleeve-Local-CA.cer`. Transfer **only** that public CA certificate to the iPad (AirDrop is convenient), install the downloaded profile, then enable it under Settings → General → About → Certificate Trust Settings. Never transfer a file named `rootCA-key.pem`.
+The first time the companion starts, it opens a private pairing page on the Mac. Keep the Mac and iPad on the same trusted Wi-Fi, scan the page’s QR code with the iPad camera, and follow Sleeve’s one-time certificate instructions. The QR selects Mac Now Playing and saves the secure address and random credential in that iPad browser automatically; it is not sent to GitHub because it travels in the URL fragment. If the pairing page does not open, visit `http://localhost:4742` on the Mac.
 
-Keep the Mac and iPad on the same trusted Wi-Fi. If macOS asks, allow incoming connections for Node. On the iPad:
+After installing the downloaded profile on iPad, enable it under Settings → General → About → Certificate Trust Settings, return to Sleeve, and retry. Allow local-network access if Safari asks. Then start YouTube Music in Chrome. Track, artwork, timing, and play/pause changes arrive through SSE without refreshing. Later visits reconnect automatically whenever `npm run companion` is running; no Vite server is needed.
 
-1. Open <https://ivankudrenko.github.io/Sleeve/> in Safari and allow local-network access if prompted.
-2. Open Sleeve settings → Music source → Mac Now Playing.
-3. Enter the address and pairing token printed by setup, then tap **Connect to Mac**.
-4. Start YouTube Music in Chrome. Sleeve updates on track/playback changes and keeps the last valid cover if playback or the connection stops.
-
-The companion must run while live updates are wanted, but no Vite server is needed. The LAN endpoint uses HTTPS, accepts only the configured Sleeve web origin, requires a random token, exposes no playback controls, and should never be port-forwarded. The token and locally generated TLS files are gitignored. If the Mac hostname or Wi-Fi address changes and `.local` resolution does not work, rerun `npm run companion:setup` and reinstall the newly generated public CA certificate.
+The companion’s media endpoint uses HTTPS, accepts only configured Sleeve origins, requires a random token, exposes no playback controls, and should never be port-forwarded. Its small HTTP helper exposes only the public CA certificate on the LAN; the token-bearing QR page is restricted to the Mac’s loopback interface. Secrets and generated TLS files are gitignored. Manual address/token entry remains under Mac Now Playing → Advanced / Manual setup.
 
 ## Sources that work now
 
@@ -98,7 +93,7 @@ The source artwork and chosen display artwork remain separate. Sleeve never auto
 
 - Sleeve cannot inspect every music app on an iPhone, iPad, Android device, Mac, or PC from a web page.
 - Direct Spotify OAuth is not included because current development-mode/Premium/allowlist/quota and policy constraints make a universal open-source connector misleading. Use a compliant local session backend or Last.fm scrobbling.
-- QR pairing is not implemented; Mac companion pairing uses a manually copied random token. Do not expose the companion or an unauthenticated Orpheus, Media Display, or Tuna endpoint to the public internet.
+- Pairing still requires installing and trusting a locally generated CA certificate once on each iPad. Ordinary web pages cannot silently grant this trust or bypass iPad local-network permissions.
 - The browser cannot override device auto-lock or operating-system power-saving settings.
 - Animated commercial album artwork is not fetched or simulated.
 - Physical iPad/Android hardware testing has not been performed. The production build includes a Safari/iOS 13 legacy bundle and responsive/touch fallbacks, but real-device verification is still needed.

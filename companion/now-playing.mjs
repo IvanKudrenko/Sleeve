@@ -21,8 +21,13 @@ export function parseMediaControlMessage(input) {
   }
 }
 
-const identity = (track) => track?.contentItemIdentifier || (track?.title && track?.artist ? `${track.title}\u0000${track.artist}` : undefined)
-const complete = (track) => Boolean(track?.title && track?.artist && track?.coverUrl)
+const identity = (track) => track?.contentItemIdentifier || (track?.title ? `${track.title}\u0000${track.artist || ''}` : undefined)
+const complete = (track) => Boolean(track?.title && track?.coverUrl)
+
+function isSameTrack(a, b) {
+  if (a?.contentItemIdentifier && b?.contentItemIdentifier) return a.contentItemIdentifier === b.contentItemIdentifier
+  return Boolean(a?.title && b?.title && a.title === b.title && (a.artist || '') === (b.artist || ''))
+}
 
 function mergeDefined(target, update) {
   for (const [key, value] of Object.entries(update)) {
@@ -56,7 +61,7 @@ export class NowPlayingAccumulator {
     }
 
     const reference = this.pending || this.current
-    if (!reference || identity(reference) !== nextIdentity) {
+    if (!reference || !isSameTrack(reference, update)) {
       this.clearPendingTimer()
       this.pending = { ...update }
       if (complete(this.pending)) this.publishPending()
@@ -79,7 +84,7 @@ export class NowPlayingAccumulator {
   stop() { this.clearPendingTimer() }
 
   publishPending() {
-    if (!this.pending?.title || !this.pending?.artist) return
+    if (!this.pending?.title) return
     this.current = this.pending
     this.pending = undefined
     this.clearPendingTimer()
